@@ -1,0 +1,90 @@
+<template>
+  <view>
+    <view wx:for="{{list}}" wx:key="item">
+      <ui-row height="80" class="collect_content" border-bottom>
+        <ui-col vertical-align="middle" align="center" width="80">
+          <image
+          src="http://static.tbk.nxspecial.cn/route.png"
+          mode='aspectFill'
+          style="width:60px;height:60px"
+          ></image>
+        </ui-col>
+        <ui-col>
+          <view class="title">{{ item.title }}</view>
+          <view class="sales">
+            <text>4.5</text>
+            <text>月售2595单</text>
+          </view>
+          <ui-row class="bottom" height="20">
+            <ui-col vertical-align="middle" align="left">
+              <view>¥20起送</view>
+            </ui-col>
+            <ui-col vertical-align="middle" align="right">
+              <view>1.2Km | 43分钟</view>
+            </ui-col>
+          </ui-row>
+        </ui-col>
+      </ui-row>
+      <ui-row class="summary_wrap" space="20">
+        <ui-col width="80"></ui-col>
+        <ui-col>
+          <view class="activity" data-idx="{{index}}" bindtap="tap">
+              6个活动 <ui-icon type="arrow-down" size="12" color="#A7A7A7" class="{{ item.class }}"></ui-icon>
+            </view>
+          <ui-summary
+            height="35"
+            state="{{item.state}}"
+            show-arrow="{{false}}">
+            <view class="discounts_content">满100减10</view>
+            <view class="discounts_content">168特价新年3人餐</view>
+            <view class="discounts_content">新用户下单立减17元</view>
+            <view class="discounts_content">新年两人特惠套餐</view>
+            <view class="discounts_content">69元人气满满特价拼盘</view>
+          </ui-summary>
+        </ui-col>
+      </ui-row>
+    </view>
+  </view>
+</template>
+
+<script>
+export default {
+  config: {
+    navigationBarTitleText: '历史行程'
+  },
+  data: {
+    state: 'summary',
+    state1: 'details',
+    list: [
+      { height: 80,
+        title: '旺顺阁鱼头泡饼',
+        // imgUrl: 'http://p0.meituan.net/200.0/deal/1e257a1f5b0d974b292ac7bc9a3c21ad71414.jpg',
+        state: 'summary',
+        class: ''
+      },
+      { height: 80,
+        title: '吉野家',
+        // imgUrl: 'http://p0.meituan.net/200.0/deal/271ab37c767d8c4ba5f705da8eb00e9032980.jpg',
+        state: 'summary',
+        class: ''
+      }
+    ]
+  },
+   tap (e) {
+    let index = e.currentTarget.dataset.idx
+    if (this.data.list[index].state === 'summary') {
+      this.data.list[index].state = 'details'
+      this.data.list[index].class = 'rotate'
+    } else {
+      this.data.list[index].state = 'summary'
+      this.data.list[index].class = ''
+    }
+    this.setData({
+      list: this.data.list
+    })
+  }
+}
+</script>
+
+<style lang="less">
+</style>

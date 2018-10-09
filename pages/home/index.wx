@@ -1,0 +1,295 @@
+<template>
+  <view class="container">
+    <view style="height:400rpx;">
+      <image class="logo" src="http://static.ntcmkj.cn/xcx/logo.png"/>      
+    </view>
+    <view>
+       <view class="class-wrap">
+         <ui-row class="class-item red" height="80" space-bottom="20" data-url="/pages/map/create" bindtap="goUrl">
+            <ui-col width="80" align="center" vertical-align="middle">
+            <view class="left_icon left_icon1">
+               <image class="mc-icon" src="http://static.tbk.nxspecial.cn/route.png"></image>
+            </view>
+        </ui-col> 
+        <ui-col vertical-align="middle" align="center" class="left-item" space="20">          
+            <view class="title">路线记录</view>
+            <text class="small-title"> 记录(路径/照片/录音/视频) & 分享 </text>          
+        </ui-col>        
+      </ui-row>
+         <ui-row class="class-item blue" height="80" space-bottom="20" data-url="/pages/history/index" bindtap="goUrl"> 
+            <ui-col width="80" align="center" vertical-align="middle">
+            <view class="left_icon left_icon1">
+               <image class="mc-icon" src="http://static.tbk.nxspecial.cn/history.png?v=3"></image>
+            </view>
+        </ui-col> 
+        <ui-col vertical-align="middle" align="center" class="left-item" space="2">          
+            <view class="title">历史行程</view>
+            <text class="small-title"> 历史出行记录 </text>          
+        </ui-col>        
+      </ui-row>
+         <ui-row class="class-item orange" height="80" space-bottom="20" data-url="/pages/resource/index" bindtap="goUrl">
+            <ui-col width="80" align="center" vertical-align="middle">
+            <view class="left_icon left_icon1">
+               <image class="mc-icon" src="http://static.tbk.nxspecial.cn/resource.png"></image>
+            </view>
+        </ui-col> 
+        <ui-col vertical-align="middle" align="center" class="left-item" space="20">          
+            <view class="title">资源管理</view>
+            <text class="small-title"> 照片 / 视频 / 录音 </text>          
+        </ui-col>        
+      </ui-row>
+      </view>
+      
+</view>
+
+<view class="bottom">
+  <text class="bottom_law" data-show="{{ true }}" bindtap="show_provision">查看《行程助手隐私条款》</text>
+  </view>  
+  <ui-popup show="{{ show5 }}" height="270" background="transparent">
+    <view class="popup5">
+        <ui-row height="40" border-bottom>
+            <ui-col vertical-align="middle" space-left="20">隐私条款</ui-col>
+            <ui-col width="40" vertical-align="middle" align="center" bindtap="handleShow5">
+                <ui-icon type="x" size="18" color="#FC8950"></ui-icon>
+            </ui-col>
+        </ui-row>
+        <view class="title" height="200px">
+          <text class="p">1.  定位过程中会请求网络，保持屏幕常亮，并保持手机亮度为最低\n\t</text>
+          <text class="p">2. 小程序会使用录音权限，相机权限，定位权限\n\t</text>
+          <text class="p">3. 定位过程中您的位置信息拍摄的视频，拍摄的照片，录音等隐私信息会上传至本小程序服务端，请知悉！</text>
+        </view>
+    </view>
+</ui-popup>
+
+<ui-popup show="{{ loginPopUp }}" height="400" background="transparent" hide-on-blur="{{blurClose}}">
+    <view class="loginPopup">
+        <ui-row height="40" border-bottom>
+            <ui-col vertical-align="middle" space-left="20">隐私条款</ui-col>
+            <ui-col width="40" vertical-align="middle" align="center" bindtap="handleLoginClose">
+                <!-- <ui-icon type="x" size="18" color="#FC8950"></ui-icon> -->
+            </ui-col>
+        </ui-row>
+        <view class="title" height="200px">
+          <text class="p">1.  定位过程中会请求网络，保持屏幕常亮，并保持手机亮度为最低\n\t</text>
+          <text class="p">2. 小程序会使用录音权限，相机权限，定位权限\n\t</text>
+          <text class="p">3. 定位过程中您的位置信息拍摄的视频，拍摄的照片，录音等隐私信息会上传至本小程序服务端，请知悉！</text>
+        </view>
+        <ui-row height="30">
+            <ui-col space-left="20" space-right="10" vertical-align="middle">
+                <button>拒绝使用</button>
+            </ui-col>
+            <ui-col space-left="10" space-right="20" vertical-align="middle">
+                <button type="primary"  open-type="getUserInfo" bindgetuserinfo="goLogin">同意使用</button>
+            </ui-col>
+        </ui-row>
+    </view>
+</ui-popup>
+
+  </view>
+  
+</template>
+
+<script>
+const user = require("../../static/data/user.js");
+var that2;
+var app = getApp();
+export default {
+  config: {
+    navigationBarTitleText: "首页",
+    backgroundColor: "#F4F4F4",
+    navigationBarTextStyle: "black"
+  },
+  data: {
+    show5: false,
+    blurClose: false,
+    loginPopUp: false
+  },
+  onReady() {
+    that2 = this;
+    //this.checkLogin();
+    user
+      .checkLogin()
+      .then(res => {       
+        wx.showToast({
+          title: "登录成功",
+          icon: "success"
+        });
+         
+        this.globalData.userInfo = wx.getStorageSync("userInfo");
+        this.globalData.token = wx.getStorageSync("token");
+        let path = wx.getStorageSync('preUrl');
+        wx.navigateTo({
+          url:path
+        })
+      })
+      .catch(() => {
+      });
+  },
+
+  hideLicense() {
+    this.setData({
+      loginPopUp: false
+    });
+  },
+  showLicense(){
+    this.setData({
+      loginPopUp:true
+    })
+
+  },
+  goLogin(e) {
+    console.log(e)
+    user
+      .loginByWeixin()
+      .then(res => {
+        this.setData({
+          userInfo: res.data.userInfo
+        });
+        app.globalData.userInfo = res.data.userInfo;
+        app.globalData.token = res.data.token;
+        wx.reLaunch({
+          url: "/pages/home/index",
+          success: function() {}
+        });
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  },
+
+  show_provision(e) {
+    let show = e.currentTarget.dataset.show;
+    this.setData({
+      show5: show
+    });
+  },
+  handleShow5() {
+    this.setData({
+      show5: false
+    });
+  },
+  goUrl(e) {
+    let path = e.currentTarget.dataset.url;    
+   user.checkLogin().then(res => {
+      wx.navigateTo({
+        url: path
+      });
+   }).catch(()=>{
+     this.showLicense();
+   });
+  },
+
+};
+</script>
+
+<style lang="less">
+text.p {
+  font-size: 12px;
+}
+view.bottom {
+  position: fixed;
+  width: 100%;
+  bottom: 5px;
+  text-align: center;
+}
+text.bottom_law {
+  color: #0070bb;
+  font-size: 12px;
+  padding: 10px 0;
+}
+
+image.logo {
+  width: 400rpx;
+  height: 400rpx;
+  margin: 0 auto;
+}
+
+.pull-down-content {
+  height: 60px;
+  margin-top: -60px;
+  .mix-flex-center();
+}
+
+.statusBar {
+  width: 100%;
+  transition: all 0.25s ease-in;
+}
+
+.class-wrap {
+  background-color: #f6f9fb;
+  padding: 0 10px 10px 10px;
+  position: relative;
+  z-index: 1;
+  &.active {
+    background-color: #ffff;
+    box-shadow: 0 0px 16px 0 #ccc;
+    z-index: 2;
+  }
+  .ui-row.title {
+    .ui-view {
+      font-size: 14px;
+      color: #2b333b;
+    }
+  }
+  .class-item {
+    border-radius: 5px;
+    .ui-col {
+      .ui-text {
+        text-align: left;
+      }
+    }
+    .mc-icon {
+      height: 70px;
+      width: 70px;
+    }
+    .title {
+      color: #fff;
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+    .small-title {
+      color: #fff;
+      font-size: 12px;
+    }
+  }
+  .blue {
+    background: #2980b9 no-repeat 95% 95%;
+    background-size: 50px;
+    box-shadow: 0 4px 16px 0 #2980b9;
+  }
+  .red {
+    background: #ff6666 no-repeat 95% 100%;
+    background-size: 50px;
+    box-shadow: 0 4px 16px 0 #ff6666;
+  }
+  .orange {
+    background: #e67e22 no-repeat 95% 100%;
+    background-size: 50px;
+    box-shadow: 0 4px 16px 0 #e67e22;
+  }
+}
+.loginPopup {
+  width: 95%;
+  background-color: #fff;
+  height: 290px;
+  margin: 0 auto;
+  border-radius: 5px;
+  overflow: hidden;
+  .title {
+    line-height: 30px;
+    padding: 10px 20px;
+  }
+}
+.popup5 {
+  width: 95%;
+  background-color: #fff;
+  height: 250px;
+  margin: 0 auto;
+  border-radius: 5px;
+  overflow: hidden;
+  .title {
+    line-height: 30px;
+    padding: 10px 20px;
+  }
+}
+</style>

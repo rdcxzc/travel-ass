@@ -1,0 +1,46 @@
+<view>
+
+  <view class="btn-area">
+    <view class="ui-row" style="height:50px;">
+      <view class="ui-col ui-col-align-center align-center valign-middle" style="flex:0 0 60px;">
+        <view class="ui-col-content align-center valign-middle">
+          <text class="target_city" bindtap="selectDistrict">{{target_city}}</text>
+        </view>
+      </view>
+      <view class="ui-col valign-middle" style="">
+        <view class="ui-col-content valign-middle">
+          <input bindinput="bindInput" placeholder="行程地点" placeholder-style="color:#BBBBBB" value="{{keywords}}"></input>
+        </view>
+      </view>
+    </view>
+  </view>
+
+
+  <view class="prevent-screen" hidden="{{!prevent}}"></view>
+
+  <view wx:if="{{tips.length > 0}}" style="border-bottom:1px solid #eee" bindtap="bindSearch" data-keywords="{{item.name}}" class="text_box" wx:for="{{tips}}" wx:key="item">
+    {{item.name}}
+  </view>
+
+
+  <view class="picker-view" animation="{{animationAddressMenu}}" style="visibility:{{addressMenuIsShow ? 'visible':'hidden'}}">
+    <view style="height:15% ;width:95%;margin-top:18rpx;margin-bottom:18rpx">
+      <text catchtap="cityCancel">取消</text>
+      <text style="float: right" catchtap="citySure">确定</text>
+    </view>
+    <picker-view style="width: 100%; height: 300px;" bindchange="cityChange" value="{{value}}" wx:key="item">
+      <picker-view-column>
+        <view wx:for="{{provinces}}" class="picker-item">
+          {{item.name}} </view>
+      </picker-view-column>
+      <picker-view-column>
+        <view wx:for="{{citys}}" class="picker-item" wx:key="item">
+          {{item.name}} </view>
+      </picker-view-column>
+      <!-- <picker-view-column>
+      <view wx:for="{{areas}}" class="picker-item" wx:key="item">
+        {{item.name}}</view>
+    </picker-view-column> -->
+    </picker-view>
+  </view>
+</view>

@@ -1,0 +1,335 @@
+<template>
+<view>
+  <view>
+
+  </view>
+<map id="map" longitude="{{longitude}}" latitude="{{latitude}}" scale="{{scale}}"  
+bindcontroltap="controltap" markers="{{markers}}"
+ bindmarkertap="markertap"
+  polyline="{{polyline}}" 
+  bindregionchange="regionchange" show-location style="width: 100%; height: {{mapHeight}}px">
+  <cover-view class="icon-wrap" style="top:{{corverTop}}px">
+    <cover-image class="location" src="http://static.tbk.nxspecial.cn/location.png"  bindtap="location"></cover-image>
+  </cover-view>
+  </map>
+
+  <view class="ctrl-container">
+<ui-row border-top border-bottom height="45" space-bottom="0">
+    <ui-col border-right align="center" vertical-align="middle" bindtap="startLogLocation">
+      <ui-icon type="{{start_icon}}" size="16"> <text class="btn-text"> {{start_text}}</text></ui-icon> 
+    </ui-col>
+    <ui-col border-right align="center" vertical-align="middle" bindtap="getSpotPhoto">
+      <ui-icon type="xiangji" size="16"> <text class="btn-text"> 现场照片</text></ui-icon> 
+      </ui-col>
+    <ui-col border-right align="center" vertical-align="middle" bindtap="getSpotAudio">
+      <ui-icon type="{{yuyin_icon}}"><text class="btn-text"> {{yuyin_text}}</text></ui-icon>
+    </ui-col>
+    <ui-col align="center" vertical-align="middle"><ui-icon type="fenxiang"><text class="btn-text"> 分享行程</text></ui-icon></ui-col>
+</ui-row>
+
+
+    
+  </view>
+
+</view>
+
+</template>
+
+<style lang="less">
+.ctrl-container {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+.btn-text {
+  font-size: 12px;
+}
+.icon-wrap {
+  position: relative;
+  top: 350px;
+  width: 80px;
+  height: 90px;
+  .location {
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 4px 16px 0 #0070bb;
+    position: absolute;
+    left: 13px;
+    height: 40px;
+    width: 40px;
+  }
+}
+.my-btn {
+  border: none;
+  background: #fff;
+}
+.column-content {
+  text-align: center;
+  height: 45px;
+  line-height: 45px;
+  width: 100%;
+  background-color: #0070bb;
+  border-radius: 5px;
+}
+.btn-area {
+  // padding: 0px 15px;
+  box-shadow: 0 0 10px 1px #ebebeb;
+  border-radius: 5px;
+  overflow: hidden;
+  margin-bottom: 50px;
+  .ui-image {
+    margin-bottom: 5px;
+  }
+  .ui-input {
+    border: 0;
+  }
+}
+.find {
+  background-color: #fd8137;
+  border: 0;
+  color: #fff;
+  outline: none;
+}
+</style>
+
+
+<script>
+var that2;
+var point = [];
+var app = getApp();
+const api = require("../../static/data/api.js");
+const util = require("../../static/data/util.js");
+var EARTH_RADIUS = 6378137.0;    //单位M
+var PI = Math.PI;
+ 
+
+
+function getGreatCircleDistance(lat1,lng1,lat2,lng2){
+
+}
+
+function getlocation(is_log) {
+  var latitude1, longitude1;
+  wx.getLocation({
+    type: "gcj02",
+    success: function(res) {
+      latitude1 = res.latitude;
+      longitude1 = res.longitude;
+      if (is_log) {
+        point.push({ latitude: latitude1, longitude: longitude1 });
+        that2.sendLocation(res);
+      }
+      that2.setData({
+        latitude: res.latitude,
+        longitude: res.longitude,
+      });
+    }
+  });
+}
+
+function drawline() {
+  that2.setData({
+    polyline: [
+      {
+        points: point,
+        color: "#99FF00",
+        width: 4,
+        dottedLine: false
+      }
+    ]
+  });
+}
+export default {
+  config: {
+    navigationBarTitleText: "行程记录"
+  },
+  getMapHeight() {
+    let wHeight = app.globalData.device.height;
+    this.setData({
+      mapHeight: wHeight - 45
+    });
+  },
+  getIconTop() {
+    let wHeight = app.globalData.device.height;
+    this.setData({
+      corverTop: wHeight - 120
+    });
+  },
+  onHide: function() {},
+  onUnload: function() {},
+  onLoad() {
+    this.getMapHeight();
+    this.getIconTop();
+  },
+  onReady: function() {
+    that2 = this;
+    getlocation();
+    util.checkRouteInfo().then(res => {
+      var loc = [
+        {
+          id: 1,
+          latitude: res.start_location.lat,
+          longitude: res.start_location.lng,
+          iconPath: "/static/images/start.png",
+          label: {
+            fontSize: 12,
+            color: "#FF0000",
+            content: "",
+            x: 0.5,
+            y: 0.5
+          },
+          callout: {
+            content: res.start,
+            color: "#000000",
+            fontSize: 16,
+            bgColor: "#ffffff",
+            borderRadius: 10,
+            display: "ALWAYS",
+            padding: 6,
+            boxShadow: "0 0 1px 1px rgba(0,0,0,.2)"
+          },
+          width: 30,
+          height: 30
+        },
+        {
+          id: 2,
+          latitude: res.end_location.lat,
+          longitude: res.end_location.lng,
+          iconPath: "/static/images/end.png",
+          label: {
+            fontSize: 12,
+            color: "#FF0000",
+            content: "",
+            x: 0.5,
+            y: 0.5
+          },
+          callout: {
+            content: res.end,
+            color: "#000000",
+            fontSize: 16,
+            bgColor: "#ffffff",
+            borderRadius: 10,
+            display: "ALWAYS",
+            padding: 6,
+            boxShadow: "0 0 1px 1px rgba(0,0,0,.2)"
+          },
+          width: 30,
+          height: 30
+        }
+      ];
+
+      that2.setData({
+        markers:loc,
+        scale:12,
+        route_id:res.route_id
+      })
+    });
+  },
+  data: {
+    route_id:'',
+    polyline: [],
+    markers: [],
+    latitude: "",
+    longitude: "",
+    start_icon: "kaishi",
+    start_text: "开始记录",
+    start_stop: false,
+    yuyin_icon: "yuyin",
+    yuyin_text: "环境录音",
+    yuyin_stop: false,
+    timer: "",
+    mapHeight: "420",
+    corverTop: "",
+    scale:14
+  },
+  location() {
+    getlocation();
+  },
+  regionchange(e) {},
+  markertap(e) {},
+  controltap(e) {},
+  sendLocation(data) {
+    if(typeof data == 'object'){
+     data.route_id = this.data.route_id;
+    }
+    util.request(api.ReportLocation, data, "POST").then(function(res) {});
+  },
+  startLogLocation() {
+    if (that2.data.start_stop == false) {
+      util.request(api.CreateRoute).then(function(res) {});
+      this.timer = setInterval(repeat, 2000);
+      function repeat() {
+        // console.log("re")
+        let res = getlocation(true);
+        console.log(res);
+        drawline();
+      }
+      that2.setData({
+        start_icon: "tingzhi",
+        start_text: "停止记录",
+        start_stop: true
+      });
+      this.keepScreenOn();
+    } else {
+      this.stopLogLocation();
+      that2.setData({
+        start_icon: "kaishi",
+        start_text: "开始记录",
+        start_stop: false
+      });
+    }
+  },
+  stopLogLocation() {
+    console.log("clear");
+    clearInterval(this.timer);
+    this.cancleScreenOn();
+  },
+  setScreenBrightness() {},
+  keepScreenOn() {
+    wx.setKeepScreenOn({
+      keepScreenOn: true
+    });
+  },
+  cancleScreenOn() {
+    wx.setKeepScreenOn({
+      keepScreenOn: false
+    });
+  },
+  getSpotPhoto() {
+    wx.navigateTo({
+      url: "../map/photo"
+    });
+  },
+  getSpotAudio() {
+    if (that2.data.yuyin_stop == false) {
+      wx.startRecord({
+        success: function(res) {
+          var tempFilePath = res.tempFilePath;
+        },
+        fail: function(res) {
+          //录音失败
+        }
+      });
+      that2.setData({
+        yuyin_icon: "tingzhi",
+        yuyin_text: "停止录音",
+        yuyin_stop: true
+      });
+    } else {
+      this.stopGetAudio();
+    }
+  },
+  stopGetAudio() {
+    wx.stopRecord();
+    that2.setData({
+      yuyin_icon: "yuyin",
+      yuyin_text: "环境录音",
+      yuyin_stop: false
+    });
+  },
+  error(e) {
+    console.log(e.detail);
+  }
+};
+</script>
+

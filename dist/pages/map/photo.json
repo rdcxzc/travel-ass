@@ -1,0 +1,7 @@
+{
+  "usingComponents": {
+    "ui-popup": "../../packages/touchui-wx-components/ui-popup/dist/index",
+    "ui-divider": "../../packages/touchui-wx-components/ui-divider/dist/index"
+  },
+  "navigationBarTitleText": "现场照片"
+}

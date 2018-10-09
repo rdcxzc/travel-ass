@@ -1,0 +1,330 @@
+<!--mapSearchTips.ui-->
+<template>
+  <view>
+
+<view class="btn-area">
+        <ui-row height="50">
+          <ui-col width="60" align="center" vertical-align="middle">
+             <text class="target_city" bindtap="selectDistrict">{{target_city}}</text>
+          </ui-col>
+          <ui-col vertical-align="middle">
+            <input  bindinput="bindInput" placeholder="行程地点" placeholder-style="color:#BBBBBB" value={{keywords}}></input>
+          </ui-col>
+        </ui-row>
+</view>
+
+   
+    <view class="prevent-screen" hidden="{{!prevent}}"></view>
+    
+    <view wx:if="{{tips.length > 0}}" style="border-bottom:1px solid #eee" bindtap="bindSearch" data-keywords="{{item.name}}" class="text_box"
+      wx:for="{{tips}}" wx:key="item">
+      {{item.name}}
+    </view>
+
+
+      <view class="picker-view" animation="{{animationAddressMenu}}" style="visibility:{{addressMenuIsShow ? 'visible':'hidden'}}">
+  <view style="height:15% ;width:95%;margin-top:18rpx;margin-bottom:18rpx">
+    <text catchtap="cityCancel">取消</text>
+    <text style="float: right" catchtap="citySure">确定</text>
+  </view>
+  <picker-view style="width: 100%; height: 300px;" bindchange="cityChange" value="{{value}}" wx:key="item">
+    <picker-view-column>
+      <view wx:for="{{provinces}}" class="picker-item">
+        {{item.name}} </view>
+    </picker-view-column>
+    <picker-view-column>
+      <view wx:for="{{citys}}" class="picker-item" wx:key="item">
+        {{item.name}} </view>
+   </picker-view-column>
+    <!-- <picker-view-column>
+      <view wx:for="{{areas}}" class="picker-item" wx:key="item">
+        {{item.name}}</view>
+    </picker-view-column> -->
+  </picker-view>
+</view>
+  </view>
+
+
+</template>
+
+
+<script>
+import amapFile from "../../static/map/amap-wx";
+var key = "4216f7d550dc95ef4ac91e3c0ee6a19a";
+
+import QQMapWX from "../../static/map/qqmap-wx-jssdk.min";
+var qqkey = "RHGBZ-S2LAU-5MRV7-4QPTZ-JI25K-HVBDV";
+var address = require("../../static/utils/city.js");
+
+var lonlat;
+var city;
+export default {
+  config: {
+    navigationBarTitleText: "地址选择"
+  },
+  data: {
+    tips: [],
+    prevent: false,
+    keywords: "",
+    animationAddressMenu: {},
+    addressMenuIsShow: false,
+    value: [0, 0, 0],
+    provinces: [],
+    citys: [],
+    areas: [],
+    areaInfo: "",
+    target_city: "请选择",
+    animation: [],
+    from_type: ""
+  },
+  onLoad(e) {
+    if (typeof e.city != "undefined") {
+      this.setData({
+        target_city: e.city,
+        from_type: e.type
+      });
+    }
+    this.animation = wx.createAnimation();
+    var id = address.provinces[0].id;
+    this.setData({
+      provinces: address.provinces,
+      citys: address.citys[id]
+      // areas: address.areas[address.citys[id][0].id],
+    });
+  },
+
+  // 输入框正在输入时触发的事件
+  bindInput(e) {
+    // 通过e.target.value获得输入框当前的值
+    var keywords = e.detail.value;
+    // 调用amapFile.AMapWX方法构建myAmapFun对象
+    var myAmapFun = new amapFile.AMapWX({ key: key });
+    let city = this.data.target_city;
+    // myAmapFun对象调用getInputtips方法获得搜索提示数据
+    myAmapFun.getInputtips({
+      keywords: keywords, // 输入框键入的关键字
+      location: lonlat, // 坐标
+      city: city, // 城市
+      success: data => {
+        // 调用成功后的回调函数
+        console.log(data, "data");
+        if (data && data.tips) {
+          this.setData({
+            tips: data.tips
+          });
+        }
+        console.log(this.data.tips, "this.data.tips");
+      }
+    });
+  },
+  // 搜索显示列表点击事件触发
+  bindSearch(e) {
+    var keywords = e.target.dataset.keywords;
+    // 调用QQMapWX构造函数构建出qqmap对象
+    var qqmap = new QQMapWX({ key: qqkey });
+    // qqmap调用geocoder方法来获取
+    qqmap.geocoder({
+      address: this.data.target_city + `${keywords}`,
+      success: res => {
+        console.log(res);
+        // 调用成功则执行文字描述转换事件
+        let pages = getCurrentPages();
+        console.log(pages);
+        let prevPage = pages[pages.length - 2];
+        console.log(this.from);
+        if (this.data.from_type == "start") {
+          prevPage.setData({
+            latitude: res.result.location.lat,
+            longitude: res.result.location.lng,
+            text: keywords
+          });
+        } else if (this.data.from_type == "end") {
+          prevPage.setData({
+            end_latitude: res.result.location.lat,
+            end_longitude: res.result.location.lng,
+            end_location: keywords
+          });
+        }
+        console.log(prevPage);
+        wx.navigateBack();
+      },
+      fail: res => {
+        // 调用失败则执行此回调函数
+      },
+      complete: res => {
+        // 成功与否都将执行此回调函数
+      }
+    });
+  },
+  // 文字描述转换事件
+  reverseGeocoder(mapObj, response) {
+    var name = response.result.title;
+    // 调用reverseGeocoder由坐标到坐标所在位置的文字描述的转换，输入坐标返回地理位置信息和附近poi列表
+    mapObj.reverseGeocoder({
+      location: {
+        latitude: response.result.location.lat,
+        longitude: response.result.location.lng
+      },
+      success: res => {
+        // 调用成功则执行此回调函数
+        // 执行打开第三方地图查看事件
+        this.openLocation(res, name);
+      },
+      fail: res => {
+        // 调用失败则执行此回调函数
+      },
+      complete: res => {
+        // 无论成功与否都会执行此回调函数
+      }
+    });
+  },
+
+  navigateBack() {
+    wx.navigateBack();
+  },
+
+  // 点击所在地区弹出选择框
+  selectDistrict: function(e) {
+    var that = this;
+    // 如果已经显示，不在执行显示动画
+    if (that.data.addressMenuIsShow) {
+      return;
+    }
+    // 执行显示动画
+    that.startAddressAnimation(true);
+  },
+  // 执行动画
+  startAddressAnimation: function(isShow) {
+    console.log(isShow);
+    var that = this;
+    if (isShow) {
+      console.log(that);
+      // vh是用来表示尺寸的单位，高度全屏是100vh
+      that.animation.translateY(0 + "vh").step();
+    } else {
+      that.animation.translateY(40 + "vh").step();
+    }
+    that.setData({
+      animationAddressMenu: that.animation.export(),
+      addressMenuIsShow: isShow
+    });
+  },
+  // 点击地区选择取消按钮
+  cityCancel: function(e) {
+    this.startAddressAnimation(false);
+  },
+  // 点击地区选择确定按钮
+  citySure: function(e) {
+    var that = this;
+    var city = that.data.city;
+    var value = that.data.value;
+    that.startAddressAnimation(false);
+    // 将选择的城市信息显示到输入框
+    var areaInfo =
+      that.data.provinces[value[0]].name + "," + that.data.citys[value[1]].name;
+    that.setData({
+      areaInfo: areaInfo,
+      target_city: that.data.citys[value[1]].name
+    });
+  },
+  // 点击蒙版时取消组件的显示
+  hideCitySelected: function(e) {
+    console.log(e);
+    this.startAddressAnimation(false);
+  },
+  // 处理省市县联动逻辑
+  cityChange: function(e) {
+    console.log(e);
+    var value = e.detail.value;
+    var provinces = this.data.provinces;
+    var citys = this.data.citys;
+    var areas = this.data.areas;
+    var provinceNum = value[0];
+    var cityNum = value[1];
+    var countyNum = value[2];
+    // 如果省份选择项和之前不一样，表示滑动了省份，此时市默认是省的第一组数据，
+    if (this.data.value[0] != provinceNum) {
+      var id = provinces[provinceNum].id;
+      this.setData({
+        value: [provinceNum, 0, 0],
+        citys: address.citys[id],
+        areas: address.areas[address.citys[id][0].id]
+      });
+    } else if (this.data.value[1] != cityNum) {
+      // 滑动选择了第二项数据，即市，此时区显示省市对应的第一组数据
+      var id = citys[cityNum].id;
+      this.setData({
+        value: [provinceNum, cityNum, 0],
+        areas: address.areas[citys[cityNum].id]
+      });
+    } else {
+      // 滑动选择了区
+      this.setData({
+        value: [provinceNum, cityNum, countyNum]
+      });
+    }
+    console.log(this.data);
+  }
+};
+</script>
+
+<style lang="less">
+// mapSearchTips.less
+.section {
+  padding: 5px 20px;
+  input {
+    width: 100%;
+    height: 30px;
+    border-radius: 5px;
+    outline: none;
+    border: 1px solid #ccc;
+    padding-left: 10px;
+  }
+}
+.text_box {
+  padding: 10px 20px;
+  line-height: 20px;
+}
+.map .section {
+  margin-bottom: 0;
+}
+
+.picker-view {
+  width: 100%;
+  display: flex;
+  z-index: 12;
+  background-color: #efefef;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  bottom: 0rpx;
+  left: 0rpx;
+  height: 40vh;
+}
+
+.btn-area {
+  // padding: 0px 15px;
+  box-shadow: 0 0 10px 1px #ebebeb;
+  border-radius: 5px;
+  overflow: hidden;
+ 
+  .ui-image {
+    margin-bottom: 5px;
+  }
+  .ui-input {
+    border: 0;
+  }
+}
+
+.picker-item {
+  line-height: 70rpx;
+  margin-left: 5rpx;
+  margin-right: 5rpx;
+  text-align: center;
+}
+.target_city {
+  border-radius: 5px;
+  padding: 8px;
+}
+</style>

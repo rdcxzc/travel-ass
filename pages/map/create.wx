@@ -1,0 +1,258 @@
+<!--mapSearchInput.ui-->
+<template>
+  <view>
+    <view class="content">
+      <view class="btn-area">
+        <ui-row height="50" border-bottom>
+          <ui-col width="50" align="center" vertical-align="middle">
+            <image class="input-icon" src="../../static/images/start.png"></image>
+          </ui-col>
+          <ui-col vertical-align="middle" >
+            <input type="text" value={{text}} placeholder="行程起点" bindtap="openLocationChoose" data-type='start'  disabled/>
+          </ui-col>
+          <ui-col width="70" align="center" vertical-align="middle" bindtap="reserveAddr">
+              <image src="{{src}}" style="width:15px;height:15px;"></image>
+              <view>我的位置</view>
+          </ui-col>
+        </ui-row>
+        <ui-row height="50">
+          <ui-col width="50" align="center" vertical-align="middle">
+            <image class="input-icon" src="../../static/images/end.png"></image>
+          </ui-col>
+           <ui-col vertical-align="middle">
+            <input type="text" value={{end_location}} disabled placeholder="行程终点" bindtap="openLocationChoose" data-type='end' />
+          </ui-col>
+        </ui-row>        
+      </view>
+      <button class="find" bindtap="createRoute">创建行程</button>
+    
+      
+    </view>
+  </view>
+</template>
+
+
+<script>
+var app = getApp();
+var appapi = require("../../static/data/api.js");
+const util = require("../../static/data/util.js");
+var that;
+var checking = false;
+// mapSearchInput.js
+import amapFile from "../../static/map/amap-wx";
+var key = "4216f7d550dc95ef4ac91e3c0ee6a19a";
+export default {
+  config: {
+    navigationBarTitleText: "创建行程"
+  },
+  data: {
+    text: "定位中…",
+    text_city: "",
+    latitude: "",
+    longitude: "",
+    location: "",
+    src: "http://static.tbk.nxspecial.cn/items/icon/pos.png",
+    end_location: "",
+    end_latitude: "",
+    end_longitude: "",
+    start_location: ""
+  },
+  fn() {
+    wx.getLocation({
+      type: "gcj02",
+      success: res => {
+        this.data.location = res.latitude + "," + res.longitude;
+        console.log(this.data.location, "location");
+      },
+      fail: err => {}
+    });
+    if (!checking) {
+      this.checkCurrentRoute();
+    }
+  },
+  onShow() {
+    if (!checking) {
+      this.checkCurrentRoute();
+    }
+  },
+  reserveAddr() {
+    console.log(this.data.location);
+    wx.request({
+      url: "https://apis.map.qq.com/ws/geocoder/v1/?",
+      data: {
+        location: this.data.location,
+        key: "RHGBZ-S2LAU-5MRV7-4QPTZ-JI25K-HVBDV"
+      },
+      success: res => {
+        console.log(res);
+        this.setData({
+          text: res.data.result.address,
+          latitude: res.data.result.location.lat,
+          longitude: res.data.result.location.lng,
+          text_city: res.data.result.ad_info.city
+        });
+      }
+    });
+  },
+  createRoute() {
+    let start_arr = {};
+    let end_arr = {};
+    let data = {};
+
+    if (!this.data.longitude || !this.data.latitude) {
+      wx.showAlert({
+        content: "行程起点未选择"
+      });
+      return false;
+    } else {
+      start_arr["start_location"] = this.data.text;
+      start_arr["start_latitude"] = this.data.latitude;
+      start_arr["start_longitude"] = this.data.longitude;
+    }
+    if (!this.data.end_latitude || !this.data.end_longitude) {
+      wx.showAlert({
+        content: "行程终点未填写"
+      });
+      return false;
+    } else {
+      end_arr["end_location"] = this.data.end_location;
+      end_arr["end_latitude"] = this.data.end_latitude;
+      end_arr["end_longitude"] = this.data.end_longitude;
+    }
+
+    data["start"] = start_arr;
+    data["end"] = end_arr;
+    this.sendCreateRoute(data);
+  },
+  sendCreateRoute(data) {
+    util.request(appapi.CreateNewRoute, data, "POST").then(function(res) {
+      if (res.errno == 0) {
+        let route_info = {};
+        route_info.route_id = res.data.route_id;
+        route_info.start = data.start.start_location;
+        route_info.end = data.end.end_location;
+        route_info.start_location = {
+          lat: data.start.start_latitude,
+          lng: data.start.start_longitude
+        };
+        route_info.end_location = {
+          lat: data.end.end_latitude,
+          lng: data.end.end_longitude
+        };
+
+        wx.setStorage({
+          key: "route_info",
+          data: route_info
+        });
+        wx.redirectTo({
+          url: "/pages/map/index"
+        });
+      }
+    });
+  },
+
+  checkCurrentRoute() {
+    checking = true;
+    const rinfo = wx.getStorageSync("route_info");
+    if (rinfo !== null && typeof rinfo == "object") {
+      if (rinfo.route_id) {
+        wx.showConfirm({
+          title: "",
+          content: "有未完成的行程，继续行程或者结束上次行程并开始新行程",
+          cancelText: "继续上次",
+          confirmText: "开始新的",
+          success: res => {
+            console.log(res);
+            if (res.confirm) {
+              this.finishRoute(rinfo);
+            }
+            if (res.cancel) {
+              wx.redirectTo({
+                url: "/pages/map/index"
+              });
+            }
+          }
+        });
+      }
+    }
+  },
+  finishRoute(rinfo) {
+    console.log(appapi);
+    util
+      .request(appapi.FinishRoute, { route_id: rinfo.route_id }, "POST")
+      .then(function(res) {
+        if (res.errno == 0) {
+          wx.setStorageSync("route_info", null);
+          wx.redirectTo({
+            path: "/pages/map/create"
+          });
+        }
+      })
+      .catch(res => {
+        wx.showToast({
+          title: "网络异常"
+        });
+      });
+  },
+  getUnfinishRoute() {},
+
+  getPosition() {
+    wx.request({
+      url: "https://apis.map.qq.com/ws/location/v1/ip",
+      data: {
+        key: "RHGBZ-S2LAU-5MRV7-4QPTZ-JI25K-HVBDV"
+      },
+      success: res => {
+        this.setData({
+          text: res.data.result.ad_info.city,
+          text_city: res.data.result.ad_info.city
+        });
+      }
+    });
+  },
+  openLocationChoose(e) {
+    let type = e.currentTarget.dataset.type;
+    wx.navigateTo({
+      url: "/pages/map/choose?city=" + this.data.text_city + "&type=" + type
+    });
+  },
+  navigateBack() {
+    wx.navigateBack();
+  },
+  onReady() {
+    that = this;
+    this.getPosition();
+    this.fn();
+  }
+};
+</script>
+
+<style lang="less">
+// mapSearchInput.less
+.content {
+  padding: 15px;
+}
+.btn-area {
+  // padding: 0px 15px;
+  box-shadow: 0 0 10px 1px #ebebeb;
+  border-radius: 5px;
+  overflow: hidden;
+  margin-bottom: 50px;
+  .ui-image {
+    margin-bottom: 5px;
+  }
+  .input-icon {
+    height: 30px;
+    width: 30px;
+  }
+  .ui-input {
+    border: 0;
+  }
+}
+.find {
+  background-color: #fd8137;
+  border: 0;
+  color: #fff;
+  outline: none;
+}
+</style>

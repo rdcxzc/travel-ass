@@ -1,0 +1,51 @@
+<view>
+  <view wx:for="{{list}}" wx:key="item">
+    <view class="collect_content ui-row ui-row-border-bottom" style="height:80px;">
+      <view class="ui-col ui-col-align-center align-center valign-middle" style="flex:0 0 80px;">
+        <view class="ui-col-content align-center valign-middle">
+          <image src="http://static.tbk.nxspecial.cn/route.png" mode="aspectFill" style="width:60px;height:60px" />
+        </view>
+      </view>
+      <view class="ui-col" style="">
+        <view class="ui-col-content">
+          <view class="title">{{ item.title }}</view>
+          <view class="sales">
+            <text>4.5</text>
+            <text>月售2595单</text>
+          </view>
+          <view class="bottom ui-row" style="height:20px;">
+            <view class="ui-col ui-col-align-left align-left valign-middle" style="">
+              <view class="ui-col-content align-left valign-middle">
+                <view>¥20起送</view>
+              </view>
+            </view>
+            <view class="ui-col ui-col-align-right align-right valign-middle" style="">
+              <view class="ui-col-content align-right valign-middle">
+                <view>1.2Km | 43分钟</view>
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+    <view class="summary_wrap ui-row" style="margin-top: 10px; margin-bottom: 10px;">
+      <view class="ui-col" style="flex:0 0 80px;">
+        <view class="ui-col-content"></view>
+      </view>
+      <view class="ui-col" style="">
+        <view class="ui-col-content">
+          <view class="activity" data-idx="{{index}}" bindtap="tap">
+            6个活动 <span type="arrow-down" size="12" color="#A7A7A7" class="{{ item.class }} ui-icon icon-arrow-down" style="color: #A7A7A7;font-size: 12px;"></span>
+          </view>
+          <ui-summary height="35" state="{{item.state}}" show-arrow="{{false}}" _pid="{{_pid}}">
+            <view class="discounts_content">满100减10</view>
+            <view class="discounts_content">168特价新年3人餐</view>
+            <view class="discounts_content">新用户下单立减17元</view>
+            <view class="discounts_content">新年两人特惠套餐</view>
+            <view class="discounts_content">69元人气满满特价拼盘</view>
+          </ui-summary>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

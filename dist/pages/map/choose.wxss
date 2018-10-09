@@ -1,0 +1,73 @@
+/* 1像素解决方案 */
+/*
+ * 清除1px
+ */
+/*
+ * 清除浮动
+ */
+/*
+ * mobile
+ */
+/*
+ * 1px
+ */
+/*
+ * text
+ */
+/* 垂直居中 */
+/* 水平居中 */
+/* 水平垂直居中 */
+/* 超出部分出省略号 */
+/* 多行文本超出部分省略号 */
+.section {
+  padding: 5px 20px;
+}
+.section input {
+  width: 100%;
+  height: 30px;
+  border-radius: 5px;
+  outline: none;
+  border: 1px solid #ccc;
+  padding-left: 10px;
+}
+.text_box {
+  padding: 10px 20px;
+  line-height: 20px;
+}
+.map .section {
+  margin-bottom: 0;
+}
+.picker-view {
+  width: 100%;
+  display: flex;
+  z-index: 12;
+  background-color: #efefef;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  bottom: 0rpx;
+  left: 0rpx;
+  height: 40vh;
+}
+.btn-area {
+  box-shadow: 0 0 10px 1px #ebebeb;
+  border-radius: 5px;
+  overflow: hidden;
+}
+.btn-area .ui-image {
+  margin-bottom: 5px;
+}
+.btn-area .ui-input {
+  border: 0;
+}
+.picker-item {
+  line-height: 70rpx;
+  margin-left: 5rpx;
+  margin-right: 5rpx;
+  text-align: center;
+}
+.target_city {
+  border-radius: 5px;
+  padding: 8px;
+}

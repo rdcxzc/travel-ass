@@ -1,0 +1,124 @@
+/* 1像素解决方案 */
+/*
+ * 清除1px
+ */
+/*
+ * 清除浮动
+ */
+/*
+ * mobile
+ */
+/*
+ * 1px
+ */
+/*
+ * text
+ */
+/* 垂直居中 */
+/* 水平居中 */
+/* 水平垂直居中 */
+/* 超出部分出省略号 */
+/* 多行文本超出部分省略号 */
+text.p {
+  font-size: 12px;
+}
+view.bottom {
+  position: fixed;
+  width: 100%;
+  bottom: 5px;
+  text-align: center;
+}
+text.bottom_law {
+  color: #0070bb;
+  font-size: 12px;
+  padding: 10px 0;
+}
+image.logo {
+  width: 400rpx;
+  height: 400rpx;
+  margin: 0 auto;
+}
+.pull-down-content {
+  height: 60px;
+  margin-top: -60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.statusBar {
+  width: 100%;
+  transition: all 0.25s ease-in;
+}
+.class-wrap {
+  background-color: #f6f9fb;
+  padding: 0 10px 10px 10px;
+  position: relative;
+  z-index: 1;
+}
+.class-wrap.active {
+  background-color: #ffff;
+  box-shadow: 0 0px 16px 0 #ccc;
+  z-index: 2;
+}
+.class-wrap .ui-row.title .ui-view {
+  font-size: 14px;
+  color: #2b333b;
+}
+.class-wrap .class-item {
+  border-radius: 5px;
+}
+.class-wrap .class-item .ui-col .ui-text {
+  text-align: left;
+}
+.class-wrap .class-item .mc-icon {
+  height: 70px;
+  width: 70px;
+}
+.class-wrap .class-item .title {
+  color: #fff;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+.class-wrap .class-item .small-title {
+  color: #fff;
+  font-size: 12px;
+}
+.class-wrap .blue {
+  background: #2980b9 no-repeat 95% 95%;
+  background-size: 50px;
+  box-shadow: 0 4px 16px 0 #2980b9;
+}
+.class-wrap .red {
+  background: #ff6666 no-repeat 95% 100%;
+  background-size: 50px;
+  box-shadow: 0 4px 16px 0 #ff6666;
+}
+.class-wrap .orange {
+  background: #e67e22 no-repeat 95% 100%;
+  background-size: 50px;
+  box-shadow: 0 4px 16px 0 #e67e22;
+}
+.loginPopup {
+  width: 95%;
+  background-color: #fff;
+  height: 290px;
+  margin: 0 auto;
+  border-radius: 5px;
+  overflow: hidden;
+}
+.loginPopup .title {
+  line-height: 30px;
+  padding: 10px 20px;
+}
+.popup5 {
+  width: 95%;
+  background-color: #fff;
+  height: 250px;
+  margin: 0 auto;
+  border-radius: 5px;
+  overflow: hidden;
+}
+.popup5 .title {
+  line-height: 30px;
+  padding: 10px 20px;
+}

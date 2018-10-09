@@ -1,0 +1,39 @@
+<view>
+  <view class="content">
+    <view class="btn-area">
+      <view class="ui-row ui-row-border-bottom" style="height:50px;">
+        <view class="ui-col ui-col-align-center align-center valign-middle" style="flex:0 0 50px;">
+          <view class="ui-col-content align-center valign-middle">
+            <image class="input-icon" src="../../static/images/start.png" />
+          </view>
+        </view>
+        <view class="ui-col valign-middle" style="">
+          <view class="ui-col-content valign-middle">
+            <input type="text" value="{{text}}" placeholder="行程起点" bindtap="openLocationChoose" data-type="start" disabled></input>
+          </view>
+        </view>
+        <view bindtap="reserveAddr" class="ui-col ui-col-align-center align-center valign-middle" style="flex:0 0 70px;">
+          <view class="ui-col-content align-center valign-middle">
+            <image src="{{src}}" style="width:15px;height:15px;" />
+            <view>我的位置</view>
+          </view>
+        </view>
+      </view>
+      <view class="ui-row" style="height:50px;">
+        <view class="ui-col ui-col-align-center align-center valign-middle" style="flex:0 0 50px;">
+          <view class="ui-col-content align-center valign-middle">
+            <image class="input-icon" src="../../static/images/end.png" />
+          </view>
+        </view>
+        <view class="ui-col valign-middle" style="">
+          <view class="ui-col-content valign-middle">
+            <input type="text" value="{{end_location}}" disabled placeholder="行程终点" bindtap="openLocationChoose" data-type="end"></input>
+          </view>
+        </view>
+      </view>
+    </view>
+    <button class="find" bindtap="createRoute">创建行程</button>
+
+
+  </view>
+</view>

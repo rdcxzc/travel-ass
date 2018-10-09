@@ -1,0 +1,99 @@
+<view>
+  <view class="camera">
+    <camera device-position="{{position}}" flash="{{flash}}" binderror="error" style="width: 100%; height:{{camera_height}}px;"></camera>
+  </view>
+
+  <view>
+
+
+    <view class="ui-row" style="margin-bottom: 5px;margin-top: 5px;">
+      <view class="ui-col ui-col-4 ui-col-align-center align-center valign-middle" style="flex: 0 0 33.33333333333333%;padding-left: 5px;padding-right: 5px;">
+        <view class="ui-col-content align-center valign-middle">
+          <view class="column-content" ontap="takePhoto">
+            <text>拍照</text>
+          </view>
+        </view>
+      </view>
+      <view class="ui-col ui-col-4" style="flex: 0 0 33.33333333333333%;">
+        <view class="ui-col-content">
+          <view class="column-content" ontap="togglePosition">
+            <text>切换摄像头</text>
+          </view>
+        </view>
+      </view>
+      <view class="ui-col ui-col-4 ui-col-align-center align-center valign-middle" style="flex: 0 0 33.33333333333333%;padding-left: 5px;padding-right: 5px;">
+        <view class="ui-col-content align-center valign-middle">
+          <view class="column-content" ontap="videoRecord">
+            <text>{{video_text}}{{time}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+  </view>
+  <!-- <view class="tips">
+      1. 该页面闪关灯自动关闭~
+      2.照片拍摄完成会立即上传服务器
+      3.视频会在30s后自动停止(离开当前页)并上传服务器
+</view> -->
+  <view class="weui-cells" style="display:{{show_preview}}">
+    <view class="weui-cell">
+      <view class="weui-cell__bd">
+        <view class="weui-uploader">
+          <view class="weui-uploader__hd">
+            <view class="weui-uploader__title">图片预览</view>
+          </view>
+          <view class="weui-uploader__bd">
+            <view class="weui-uploader__files">
+              <block wx:for="{{photoList}}" wx:key="cover" wx:for-item="image" wx:for-index="idx">
+                <view class="weui-uploader__file">
+                  <image class="weui-uploader__img" data-index="{{idx}}" src="{{image.cover}}" data-src="{{image.path}}" bindtap="previewImage" />
+                  <text ontap="deleteImg" data-index="{{idx}}" data-src="{{image.path}}">x</text>
+                </view>
+
+              </block>
+
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+  <view class="weui-cells" style="display:{{show_preview}}">
+    <view class="weui-cell">
+      <view class="weui-cell__bd">
+        <view class="weui-uploader">
+          <view class="weui-uploader__hd">
+            <view class="weui-uploader__title">视频预览</view>
+          </view>
+          <view class="weui-uploader__bd">
+            <view class="weui-uploader__files">
+              <block wx:for="{{videoList}}" wx:key="cover" wx:for-item="video" wx:for-index="idx">
+                <view class="weui-uploader__file">
+                  <image class="weui-uploader__img" data-index="{{idx}}" src="{{video.cover}}" data-poster="{{video.cover}}" data-src="{{video.path}}" bindtap="previewVideo" data-show="{{ true }}" />
+                  <text ontap="deleteVideo" data-index="{{idx}}" data-src="{{video.path}}">x</text>
+                </view>
+              </block>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+
+
+
+
+
+  <view style="display:{{popupvideo}}">
+    <ui-popup show="{{ show3 }}" height="100%" _pid="{{_pid}}">
+      <view class="popup1">
+        <video style="width:100%" poster="{{video.poster}}" src="{{video.src}}" controls muted="true" page-gesture="true"></video>
+        <ui-divider padding="20" _pid="{{_pid}}">视频播放默认静音，播放器支持手势操作</ui-divider>
+        <button bindtap="handleShow3" plain type="primary">关闭</button>
+      </view>
+    </ui-popup>
+  </view>
+
+</view>

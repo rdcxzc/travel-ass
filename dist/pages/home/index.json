@@ -1,0 +1,8 @@
+{
+  "usingComponents": {
+    "ui-popup": "../../packages/touchui-wx-components/ui-popup/dist/index"
+  },
+  "navigationBarTitleText": "首页",
+  "backgroundColor": "#F4F4F4",
+  "navigationBarTextStyle": "black"
+}

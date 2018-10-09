@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "ui-summary": "../../packages/touchui-wx-components/ui-summary/dist/index"
+  },
+  "navigationBarTitleText": "历史行程"
+}

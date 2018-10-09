@@ -1,0 +1,500 @@
+<template>
+  <view>
+    <view class="camera">
+    <camera device-position="{{position}}" flash="{{flash}}" binderror="error" style="width: 100%; height:{{camera_height}}px;"></camera>
+    </view>
+
+    <view>
+    
+
+<ui-row  space-bottom="5" space-top="5">
+    <ui-col span="4" vertical-align="middle" align="center" space-left="5" space-right="5">
+       <view class="column-content" ontap="takePhoto">
+          <text>拍照</text>
+        </view>
+    </ui-col>
+    <ui-col span="4">
+       <view class="column-content" ontap="togglePosition">
+          <text>切换摄像头</text>
+        </view>     
+    </ui-col>
+    <ui-col span="4" vertical-align="middle" align="center" space-left="5" space-right="5">
+        <view class="column-content" ontap="videoRecord">
+          <text >{{video_text}}{{time}}</text>
+        </view>
+    </ui-col>
+</ui-row>
+
+    </view>
+    <!-- <view class="tips">
+      1. 该页面闪关灯自动关闭~
+      2.照片拍摄完成会立即上传服务器
+      3.视频会在30s后自动停止(离开当前页)并上传服务器
+</view> -->
+    <view class="weui-cells" style="display:{{show_preview}}">
+          <view class="weui-cell">
+            <view class="weui-cell__bd">
+              <view class="weui-uploader">
+                <view class="weui-uploader__hd">
+                  <view class="weui-uploader__title">图片预览</view>
+                </view>
+                <view class="weui-uploader__bd">
+                  <view class="weui-uploader__files">
+                    <block wx:for="{{photoList}}" wx:key="cover" wx:for-item="image" wx:for-index="idx">
+                      <view class="weui-uploader__file">
+                        <image class="weui-uploader__img" data-index="{{idx}}" src="{{image.cover}}" data-src="{{image.path}}" bindtap="previewImage"></image>
+                        <text ontap="deleteImg" data-index="{{idx}}" data-src="{{image.path}}">x</text>
+                      </view>
+                      
+                    </block>
+                   
+                  </view>
+                </view>
+              </view>
+            </view>
+          </view>
+        </view>
+            <view class="weui-cells" style="display:{{show_preview}}">
+          <view class="weui-cell">
+            <view class="weui-cell__bd">
+              <view class="weui-uploader">
+                <view class="weui-uploader__hd">
+                  <view class="weui-uploader__title">视频预览</view>
+                </view>
+                <view class="weui-uploader__bd">
+                  <view class="weui-uploader__files">
+                    <block wx:for="{{videoList}}" wx:key="cover" wx:for-item="video" wx:for-index="idx">
+                      <view class="weui-uploader__file">
+                        <image class="weui-uploader__img" data-index="{{idx}}" src="{{video.cover}}" data-poster="{{video.cover}}" data-src="{{video.path}}" bindtap="previewVideo" data-show="{{ true }}"></image>
+                      <text ontap="deleteVideo" data-index="{{idx}}" data-src="{{video.path}}">x</text>
+                      </view>
+                    </block>
+                  </view>
+                </view>
+              </view>
+            </view>
+          </view>
+        </view>
+  
+
+  
+
+
+
+<view style="display:{{popupvideo}}">
+    <ui-popup show="{{ show3 }}" height="100%">
+    <view class="popup1">
+      <video style="width:100%" poster="{{video.poster}}" src="{{video.src}}" controls muted=true page-gesture=true></video>
+         <ui-divider padding="20">视频播放默认静音，播放器支持手势操作</ui-divider>
+        <button bindtap="handleShow3" plain type="primary">关闭</button>
+    </view>
+</ui-popup>
+  </view>
+
+  </view>
+</template>
+
+<script>
+var appapi = require("../../static/data/api.js");
+// const util = require("../../static/data/util.js");
+var ctx;
+var interval;
+var app = getApp();
+var ischecking = false;
+
+var photoList = new Array();
+var photoLists = new Array();
+var videoList = new Array();
+var that;
+var tempheight;
+
+export default {
+  config: {
+    navigationBarTitleText: "现场照片"
+  },
+  onReady: function() {
+    that = this;
+    ctx = wx.createCameraContext();
+    this.getCameraHeight();
+  },
+  getCameraHeight() {
+    let wHeight = app.globalData.device.height;
+    this.setData({
+      camera_height: wHeight - 300
+    });
+  },
+  getIconTop() {
+    let wHeight = app.globalData.device.height;
+    this.setData({
+      corverTop: wHeight - 120
+    });
+  },
+
+  data: {
+    src: "",
+    camera_height: "350",
+    position: "back",
+    flash: "off",
+    show_preview: "block",
+    photoList: [],
+    video_text: "录视频",
+    is_startVideo: false,
+    time: "(30s)",
+    currentTime: 30,
+    photoLists: [],
+    videoList: [],
+    popupvideo: "none",
+    show3: false,
+    video: {
+      poster: "",
+      src: ""
+    }
+  },
+
+  takePhoto() {
+     let route_info = wx.getStorageSync("route_info");
+    console.log(ctx);
+    ctx.takePhoto({
+      quality: "high",
+      success: res => {
+        let o = {
+          cover: res.tempImagePath,
+          path: res.tempImagePath
+        };
+        photoLists.push(res.tempImagePath);
+        photoList.push(o);
+        wx.uploadFile({
+          url: appapi.UploadFiles,
+          filePath: res.tempImagePath,
+          name: "file",
+          header: {
+            // 'Content-Type': 'application/json',
+            "X-Travel-Token": wx.getStorageSync("token")
+          },
+          formData: {
+            type: "pic",
+            route_id: route_info.route_id
+          },
+          success: function(res) {
+            if (res.data.errno == 0) {
+              wx.showToast({
+                title: "上传成功"
+              });
+            }
+            // console.log(res.data);
+          }
+        });
+        // console.log(photoList);
+        that.setData({
+          photoList: photoList,
+          photoLists: photoLists,
+          show_preview: "block"
+        });
+      }
+    });
+  },
+  videoRecord() {
+    var is_startVideo = this.data.is_startVideo;
+     let route_info = wx.getStorageSync("route_info");
+    if (!is_startVideo) {
+      ctx.startRecord({
+        timeoutCallback: function(res) {
+          let o = {
+            cover: res.tempThumbPath,
+            path: res.tempVideoPath
+          };
+          videoList.push(o);
+          clearInterval(interval);
+          wx.uploadFile({
+            url: appapi.UploadFiles,
+            filePath: res.tempVideoPath,
+            name: "file",
+            header: {
+              // 'Content-Type': 'application/json',
+              "X-Travel-Token": wx.getStorageSync("token")
+            },
+            formData: {
+              type: "video",
+              route_id: route_info.route_id
+            },
+            success: function(res) {
+              if (res.data.errno == 0) {
+                wx.showToast({
+                  title: "上传成功"
+                });
+              }
+              // console.log(res.data);
+            }
+          });
+          that.setData({
+            videoList: videoList,
+            show_preview: "block",
+            video_text: "录视频",
+            currentTime: 30,
+            time: "(30s)",
+            is_startVideo: false
+          });
+        },
+        success: res => {
+          if (!is_startVideo) {
+            that.setData({
+              video_text: "停止",
+              is_startVideo: true
+            });
+          }
+          this.countDown();
+          console.log(res);
+        },
+        fail: function(res) {
+          if (!is_startVideo) {
+            this.setData({
+              video_text: "录视频",
+              is_startVideo: false
+            });
+          }
+        }
+      });
+    } else {
+      this.stopVideoRerecord();
+    }
+  },
+  stopVideoRerecord() {
+     let route_info = wx.getStorageSync("route_info");
+    ctx.stopRecord({
+      success: function(res) {
+        let o = {
+          cover: res.tempThumbPath,
+          path: res.tempVideoPath
+        };
+        videoList.push(o);
+        clearInterval(interval);
+        wx.uploadFile({
+          url: appapi.UploadFiles,
+          filePath: res.tempVideoPath,
+          name: "file",
+          header: {
+            // 'Content-Type': 'application/json',
+            "X-Travel-Token": wx.getStorageSync("token")
+          },
+          formData: {
+            type: "video",
+            route_id: route_info.route_id
+          },
+          success: function(res) {
+            // console.log(res.data);
+            if (res.data.errno == 0) {
+              wx.showToast({
+                title: "上传成功"
+              });
+            }
+          }
+        });
+        that.setData({
+          videoList: videoList,
+          show_preview: "block",
+          video_text: "录视频",
+          currentTime: 30,
+          time: "(30s)",
+          is_startVideo: false
+        });
+      }
+    });
+  },
+  countDown() {
+    var currentTime = that.data.currentTime;
+    interval = setInterval(function() {
+      currentTime--;
+      that.setData({
+        time: "(" + currentTime + "s)"
+      });
+      if (currentTime <= 0) {
+        console.log(1111);
+        clearInterval(interval);
+        that.setData({
+          video_text: "录视频",
+          currentTime: 30,
+          time: "(30s)",
+          is_startVideo: false
+        });
+      }
+    }, 1000);
+  },
+  togglePosition() {
+    this.setData({
+      position: this.data.position === "front" ? "back" : "front"
+    });
+  },
+  previewImage(e) {
+    const current = e.target.dataset.src;
+    wx.previewImage({
+      current,
+      urls: this.data.photoLists
+    });
+  },
+  deleteImg(e) {
+    var index = e.target.dataset.index;
+    var src = e.target.dataset.src;
+    var imgList = this.data.photoList;
+    if (index > -1) {
+      imgList.splice(index, 1);
+    }
+    that.setData({
+      photoList: imgList
+    });
+  },
+  deleteVideo(e) {
+    var index = e.target.dataset.index;
+    var src = e.target.dataset.src;
+    var videoList = this.data.videoList;
+    if (index > -1) {
+      videoList.splice(index, 1);
+    }
+    that.setData({
+      videoList: videoList
+    });
+  },
+  previewVideo(e) {
+    tempheight = this.data.camera_height;
+    let show = e.currentTarget.dataset.show;
+    let poster = e.currentTarget.dataset.poster;
+    let src = e.currentTarget.dataset.src;
+    this.setData({
+      show3: show,
+      camera_height: 0,
+      popupvideo: "block",
+      video: {
+        poster: poster,
+        src: src
+      }
+    });
+  },
+  handleShow3() {
+    this.setData({
+      show3: false,
+      camera_height: tempheight,
+      popupvideo: "none",
+      video: {
+        poster: "",
+        src: ""
+      }
+    });
+  },
+  saveFileServer() {
+    let tempImg = this.data.photoList;
+    let tempVideo = this.data.videoList;
+    let route_info = wx.getStorageSync("route_info");
+    var img_done = false;
+    var video_done = false;
+    for (var o in tempImg) {
+      wx.uploadFile({
+        url: appapi.UploadFiles,
+        filePath: tempImg[o].cover,
+        name: "file",
+        header: {
+          // 'Content-Type': 'application/json',
+          "X-Travel-Token": wx.getStorageSync("token")
+        },
+        formData: {
+          type: "pic",
+          route_id: route_info.route_id
+        },
+        success: function(res) {
+          console.log(res.data);
+        }
+      });
+      if (o == tempImg.length - 1) {
+        img_done = true;
+      }
+    }
+
+    for (var o in tempVideo) {
+      wx.uploadFile({
+        url: appapi.UploadFiles,
+        filePath: tempVideo[o].path,
+        name: "file",
+        header: {
+          "X-Travel-Token": wx.getStorageSync("token")
+        },
+        formData: {
+          type: "video",
+          route_id: route_info.route_id
+        },
+        success: function(res) {
+          console.log(res.data);
+        }
+      });
+      if (o == tempVideo.length - 1) {
+        video_done = true;
+      }
+    }
+    if (video_done && img_done) {
+      wx.showToast({
+        content: "上传成功！"
+      });
+    }
+    // wx.uploadFile({
+    //   url: 'https://example.weixin.qq.com/upload', //仅为示例，非真实的接口地址
+    //   filePath: tempFilePaths[0],
+    //   name: 'file',
+    //   formData: {
+    //     'user': 'test'
+    //   },
+    //   success (res){
+    //     const data = res.data
+    //     //do something
+    //   }
+    // })
+  }
+};
+</script>
+
+<style lang="less">
+@import "../../static/styles/weui.wxss";
+.ctrl-container {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+.btn-text {
+  font-size: 12px;
+}
+.column-content {
+  text-align: center;
+  height: 100px;
+  line-height: 100px;
+  width: 100%;
+  background-color: #eee;
+  border-radius: 5px;
+}
+.text-box {
+  margin-bottom: 70rpx;
+  padding: 40rpx 0;
+  display: flex;
+  min-height: 300rpx;
+  background-color: #ffffff;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-size: 30rpx;
+  color: #353535;
+  line-height: 2em;
+}
+
+.weui-uploader__file {
+  position: relative;
+}
+.weui-uploader__file text {
+  position: absolute;
+  top: 0;
+  font-size: 12px;
+  z-index: 15;
+  right: 0;
+  border-radius: 50%;
+  height: 15px;
+  line-height: 15px;
+  border: 1px solid rgb(199, 37, 37);
+  background: rgb(199, 37, 37);
+  color: #fff;
+  padding: 1px 6px;
+}
+</style>

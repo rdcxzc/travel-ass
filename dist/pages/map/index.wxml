@@ -1,0 +1,37 @@
+<view>
+  <view>
+
+  </view>
+  <map id="map" longitude="{{longitude}}" latitude="{{latitude}}" scale="{{scale}}" bindcontroltap="controltap" markers="{{markers}}" bindmarkertap="markertap" polyline="{{polyline}}" bindregionchange="regionchange" show-location style="width: 100%; height: {{mapHeight}}px">
+    <cover-view class="icon-wrap" style="top:{{corverTop}}px">
+      <cover-image class="location" src="http://static.tbk.nxspecial.cn/location.png" bindtap="location"></cover-image>
+    </cover-view>
+  </map>
+
+  <view class="ctrl-container">
+    <view class="ui-row ui-row-border-top ui-row-border-bottom" style="margin-bottom: 0px;height:45px;">
+      <view bindtap="startLogLocation" class="ui-col ui-col-border-right ui-col-align-center align-center valign-middle" style="">
+        <view class="ui-col-content align-center valign-middle">
+          <span type="{{start_icon}}" size="16" class="ui-icon icon-{{start_icon}}" style="font-size: 16px;"> <text class="btn-text"> {{start_text}}</text></span>
+        </view>
+      </view>
+      <view bindtap="getSpotPhoto" class="ui-col ui-col-border-right ui-col-align-center align-center valign-middle" style="">
+        <view class="ui-col-content align-center valign-middle">
+          <span type="xiangji" size="16" class="ui-icon icon-xiangji" style="font-size: 16px;"> <text class="btn-text"> 现场照片</text></span>
+        </view>
+      </view>
+      <view bindtap="getSpotAudio" class="ui-col ui-col-border-right ui-col-align-center align-center valign-middle" style="">
+        <view class="ui-col-content align-center valign-middle">
+          <span type="{{yuyin_icon}}" class="ui-icon icon-{{yuyin_icon}}" style="font-size: 16px;"><text class="btn-text"> {{yuyin_text}}</text></span>
+        </view>
+      </view>
+      <view class="ui-col ui-col-align-center align-center valign-middle" style="">
+        <view class="ui-col-content align-center valign-middle"><span type="fenxiang" class="ui-icon icon-fenxiang" style="font-size: 16px;"><text class="btn-text"> 分享行程</text></span></view>
+      </view>
+    </view>
+
+
+
+  </view>
+
+</view>

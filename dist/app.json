@@ -1,0 +1,23 @@
+{
+  "pages": [
+    "pages/home/index",
+    "pages/map/index",
+    "pages/map/photo",
+    "pages/history/index",
+    "pages/map/create",
+    "pages/map/choose"
+  ],
+  "window": {
+    "backgroundTextStyle": "dark",
+    "backgroundColor": "#efefef",
+    "navigationBarBackgroundColor": "#ffffff",
+    "navigationBarTitleText": "MC Studio",
+    "navigationBarTextStyle": "black"
+  },
+  "networkTimeout": {
+    "request": 10000
+  },
+  "theme": {
+    "theme-color": "#39f"
+  }
+}

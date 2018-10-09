@@ -1,0 +1,10 @@
+<view class="ui-summary">
+  <view class="details" style="height: {{detailsObj.height}}px; transition: {{animate ? 'height 0.3s' : ''}}">
+    <slot></slot>
+  </view>
+  <view wx:if="{{showArrow}}" bindtap="touchStartHandler">
+    <view class="button">
+      <image class="button-image" style="transition: {{animate ? 'height 0.3s' : ''}};transform: {{buttonImageObj.transform}}" src="{{triangleImg}}" />
+    </view>
+  </view>
+</view>

@@ -1,0 +1,111 @@
+<view class="container">
+  <view style="height:400rpx;">
+    <image class="logo" src="http://static.ntcmkj.cn/xcx/logo.png" />
+  </view>
+  <view>
+    <view class="class-wrap">
+      <view class="class-item red ui-row" data-url="/pages/map/create" bindtap="goUrl" style="margin-bottom: 20px;height:80px;">
+        <view class="ui-col ui-col-align-center align-center valign-middle" style="flex:0 0 80px;">
+          <view class="ui-col-content align-center valign-middle">
+            <view class="left_icon left_icon1">
+              <image class="mc-icon" src="http://static.tbk.nxspecial.cn/route.png" />
+            </view>
+          </view>
+        </view>
+        <view class="left-item ui-col ui-col-align-center align-center valign-middle" style="padding-left: 10px; padding-right: 10px;">
+          <view class="ui-col-content align-center valign-middle">
+            <view class="title">路线记录</view>
+            <text class="small-title"> 记录(路径/照片/录音/视频) & 分享 </text>
+          </view>
+        </view>
+      </view>
+      <view class="class-item blue ui-row" data-url="/pages/history/index" bindtap="goUrl" style="margin-bottom: 20px;height:80px;">
+        <view class="ui-col ui-col-align-center align-center valign-middle" style="flex:0 0 80px;">
+          <view class="ui-col-content align-center valign-middle">
+            <view class="left_icon left_icon1">
+              <image class="mc-icon" src="http://static.tbk.nxspecial.cn/history.png?v=3" />
+            </view>
+          </view>
+        </view>
+        <view class="left-item ui-col ui-col-align-center align-center valign-middle" style="padding-left: 1px; padding-right: 1px;">
+          <view class="ui-col-content align-center valign-middle">
+            <view class="title">历史行程</view>
+            <text class="small-title"> 历史出行记录 </text>
+          </view>
+        </view>
+      </view>
+      <view class="class-item orange ui-row" data-url="/pages/resource/index" bindtap="goUrl" style="margin-bottom: 20px;height:80px;">
+        <view class="ui-col ui-col-align-center align-center valign-middle" style="flex:0 0 80px;">
+          <view class="ui-col-content align-center valign-middle">
+            <view class="left_icon left_icon1">
+              <image class="mc-icon" src="http://static.tbk.nxspecial.cn/resource.png" />
+            </view>
+          </view>
+        </view>
+        <view class="left-item ui-col ui-col-align-center align-center valign-middle" style="padding-left: 10px; padding-right: 10px;">
+          <view class="ui-col-content align-center valign-middle">
+            <view class="title">资源管理</view>
+            <text class="small-title"> 照片 / 视频 / 录音 </text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+  </view>
+
+  <view class="bottom">
+    <text class="bottom_law" data-show="{{ true }}" bindtap="show_provision">查看《行程助手隐私条款》</text>
+  </view>
+  <ui-popup show="{{ show5 }}" height="270" background="transparent" _pid="{{_pid}}">
+    <view class="popup5">
+      <view class="ui-row ui-row-border-bottom" style="height:40px;">
+        <view class="ui-col valign-middle" style="padding-left: 20px;">
+          <view class="ui-col-content valign-middle">隐私条款</view>
+        </view>
+        <view bindtap="handleShow5" class="ui-col ui-col-align-center align-center valign-middle" style="flex:0 0 40px;">
+          <view class="ui-col-content align-center valign-middle">
+            <span type="x" size="18" color="#FC8950" class="ui-icon icon-x" style="color: #FC8950;font-size: 18px;"></span>
+          </view>
+        </view>
+      </view>
+      <view class="title" height="200px">
+        <text class="p">1. 定位过程中会请求网络，保持屏幕常亮，并保持手机亮度为最低\n\t</text>
+        <text class="p">2. 小程序会使用录音权限，相机权限，定位权限\n\t</text>
+        <text class="p">3. 定位过程中您的位置信息拍摄的视频，拍摄的照片，录音等隐私信息会上传至本小程序服务端，请知悉！</text>
+      </view>
+    </view>
+  </ui-popup>
+
+  <ui-popup show="{{ loginPopUp }}" height="400" background="transparent" hide-on-blur="{{blurClose}}" _pid="{{_pid}}">
+    <view class="loginPopup">
+      <view class="ui-row ui-row-border-bottom" style="height:40px;">
+        <view class="ui-col valign-middle" style="padding-left: 20px;">
+          <view class="ui-col-content valign-middle">隐私条款</view>
+        </view>
+        <view bindtap="handleLoginClose" class="ui-col ui-col-align-center align-center valign-middle" style="flex:0 0 40px;">
+          <view class="ui-col-content align-center valign-middle">
+            <!-- <ui-icon type="x" size="18" color="#FC8950"></ui-icon> -->
+          </view>
+        </view>
+      </view>
+      <view class="title" height="200px">
+        <text class="p">1. 定位过程中会请求网络，保持屏幕常亮，并保持手机亮度为最低\n\t</text>
+        <text class="p">2. 小程序会使用录音权限，相机权限，定位权限\n\t</text>
+        <text class="p">3. 定位过程中您的位置信息拍摄的视频，拍摄的照片，录音等隐私信息会上传至本小程序服务端，请知悉！</text>
+      </view>
+      <view class="ui-row" style="height:30px;">
+        <view class="ui-col valign-middle" style="padding-left: 20px;padding-right: 10px;">
+          <view class="ui-col-content valign-middle">
+            <button>拒绝使用</button>
+          </view>
+        </view>
+        <view class="ui-col valign-middle" style="padding-left: 10px;padding-right: 20px;">
+          <view class="ui-col-content valign-middle">
+            <button type="primary" open-type="getUserInfo" bindgetuserinfo="goLogin">同意使用</button>
+          </view>
+        </view>
+      </view>
+    </view>
+  </ui-popup>
+
+</view>
