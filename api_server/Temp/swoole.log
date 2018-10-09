@@ -1,0 +1,64 @@
+[2018-08-28 07:13:24 *5123.1]	WARNING	swSignalfd_onSignal: signal[1] callback is null.
+[2018-08-28 07:13:24 #5111.1]	WARNING	swSignalfd_onSignal: signal[1] callback is null.
+[2018-08-28 07:13:24 #5111.1]	NOTICE	Server is shutdown now.
+[2018-09-06 07:46:29 *2944.4]	ERROR	zm_deactivate_swoole (ERROR 503): Fatal error: Class 'App\HttpController\Api\AbstractBase' not found in /vagrant/my/App/HttpController/Api/Login.php on line 11.
+[2018-09-06 07:46:29 $2930.0]	WARNING	swManager_check_exit_status: worker#4 abnormal exit, status=255, signal=0
+[2018-09-06 07:46:31 *2945.5]	ERROR	zm_deactivate_swoole (ERROR 503): Fatal error: Class 'App\HttpController\Api\AbstractBase' not found in /vagrant/my/App/HttpController/Api/Login.php on line 11.
+[2018-09-06 07:46:31 $2930.0]	WARNING	swManager_check_exit_status: worker#5 abnormal exit, status=255, signal=0
+[2018-09-06 07:46:40 *2955.4]	ERROR	zm_deactivate_swoole (ERROR 503): Fatal error: Class 'App\HttpController\Api\AbstractBase' not found in /vagrant/my/App/HttpController/Api/Login.php on line 11.
+[2018-09-06 07:46:40 $2930.0]	WARNING	swManager_check_exit_status: worker#4 abnormal exit, status=255, signal=0
+[2018-09-06 07:46:42 *2956.5]	ERROR	zm_deactivate_swoole (ERROR 503): Fatal error: Class 'App\HttpController\Api\AbstractBase' not found in /vagrant/my/App/HttpController/Api/Login.php on line 11.
+[2018-09-06 07:46:42 $2930.0]	WARNING	swManager_check_exit_status: worker#5 abnormal exit, status=255, signal=0
+[2018-09-06 07:50:08 *2979.4]	ERROR	zm_deactivate_swoole (ERROR 503): Fatal error: Class 'App\HttpController\Api\AbstractBase' not found in /vagrant/my/App/HttpController/Api/Login.php on line 11.
+[2018-09-06 07:50:08 $2965.0]	WARNING	swManager_check_exit_status: worker#4 abnormal exit, status=255, signal=0
+[2018-09-06 07:50:11 *2980.5]	ERROR	zm_deactivate_swoole (ERROR 503): Fatal error: Class 'App\HttpController\Api\AbstractBase' not found in /vagrant/my/App/HttpController/Api/Login.php on line 11.
+[2018-09-06 07:50:11 $2965.0]	WARNING	swManager_check_exit_status: worker#5 abnormal exit, status=255, signal=0
+[2018-09-06 07:52:39 *3007.4]	ERROR	zm_deactivate_swoole (ERROR 503): Fatal error: Class 'App\HttpController\Api\AbstractBase' not found in /vagrant/my/App/HttpController/Api/Login.php on line 11.
+[2018-09-06 07:52:39 $2993.0]	WARNING	swManager_check_exit_status: worker#4 abnormal exit, status=255, signal=0
+[2018-09-06 07:52:41 *3008.5]	ERROR	zm_deactivate_swoole (ERROR 503): Fatal error: Class 'App\HttpController\Api\AbstractBase' not found in /vagrant/my/App/HttpController/Api/Login.php on line 11.
+[2018-09-06 07:52:41 $2993.0]	WARNING	swManager_check_exit_status: worker#5 abnormal exit, status=255, signal=0
+[2018-09-06 07:53:11 *3013.4]	ERROR	zm_deactivate_swoole (ERROR 503): Fatal error: Class 'App\HttpController\Api\AbstractBase' not found in /vagrant/my/App/HttpController/Api/Login.php on line 11.
+[2018-09-06 07:53:11 $2993.0]	WARNING	swManager_check_exit_status: worker#4 abnormal exit, status=255, signal=0
+[2018-09-06 07:53:52 *3015.4]	ERROR	zm_deactivate_swoole (ERROR 503): Fatal error: Class 'App\HttpController\Api\AbstractBase' not found in /vagrant/my/App/HttpController/Api/Login.php on line 11.
+[2018-09-06 07:53:52 $2993.0]	WARNING	swManager_check_exit_status: worker#4 abnormal exit, status=255, signal=0
+[2018-09-06 07:53:53 *3014.5]	ERROR	zm_deactivate_swoole (ERROR 503): Fatal error: Class 'App\HttpController\Api\AbstractBase' not found in /vagrant/my/App/HttpController/Api/Login.php on line 11.
+[2018-09-06 07:53:53 $2993.0]	WARNING	swManager_check_exit_status: worker#5 abnormal exit, status=255, signal=0
+[2018-09-06 07:54:00 *3009.6]	ERROR	zm_deactivate_swoole (ERROR 503): Fatal error: Class 'App\HttpController\Api\AbstractBase' not found in /vagrant/my/App/HttpController/Api/Login.php on line 11.
+[2018-09-06 07:54:00 $2993.0]	WARNING	swManager_check_exit_status: worker#6 abnormal exit, status=255, signal=0
+[2018-09-06 10:11:59 *3579.7]	WARNING	swSignalfd_onSignal: signal[1] callback is null.
+[2018-09-06 10:11:59 *3578.6]	WARNING	swSignalfd_onSignal: signal[1] callback is null.
+[2018-09-06 10:11:59 *3577.5]	WARNING	swSignalfd_onSignal: signal[1] callback is null.
+[2018-09-06 10:11:59 *3576.4]	WARNING	swSignalfd_onSignal: signal[1] callback is null.
+[2018-09-06 10:11:59 *3575.3]	WARNING	swSignalfd_onSignal: signal[1] callback is null.
+[2018-09-06 10:11:59 *3574.2]	WARNING	swSignalfd_onSignal: signal[1] callback is null.
+[2018-09-06 10:11:59 *3573.1]	WARNING	swSignalfd_onSignal: signal[1] callback is null.
+[2018-09-06 10:11:59 *3572.0]	WARNING	swSignalfd_onSignal: signal[1] callback is null.
+[2018-09-06 10:11:59 $3562.0]	WARNING	swSignal_callback: signal[1] callback is null.
+[2018-09-06 10:11:59 #3561.1]	WARNING	swSignalfd_onSignal: signal[1] callback is null.
+[2018-09-06 10:11:59 $3562.0]	WARNING	swManager_check_exit_status: worker#17 abnormal exit, status=0, signal=1
+[2018-09-06 10:11:59 $3562.0]	WARNING	swManager_check_exit_status: worker#16 abnormal exit, status=0, signal=1
+[2018-09-07 03:29:32 *2335.4]	NOTICE	swFactoryProcess_finish (ERROR 1004): send 360 byte failed, because connection[fd=2] is closed.
+[2018-09-07 03:29:32 *2335.4]	NOTICE	swFactoryProcess_finish (ERROR 1004): send 351 byte failed, because connection[fd=2] is closed.
+[2018-09-07 04:53:37 *2538.7]	WARNING	swSignalfd_onSignal: signal[1] callback is null.
+[2018-09-07 04:53:37 *2537.6]	WARNING	swSignalfd_onSignal: signal[1] callback is null.
+[2018-09-07 04:53:37 *2536.5]	WARNING	swSignalfd_onSignal: signal[1] callback is null.
+[2018-09-07 04:53:37 *2535.4]	WARNING	swSignalfd_onSignal: signal[1] callback is null.
+[2018-09-07 04:53:37 *2534.3]	WARNING	swSignalfd_onSignal: signal[1] callback is null.
+[2018-09-07 04:53:37 *2533.2]	WARNING	swSignalfd_onSignal: signal[1] callback is null.
+[2018-09-07 04:53:37 *2532.1]	WARNING	swSignalfd_onSignal: signal[1] callback is null.
+[2018-09-07 04:53:37 *2531.0]	WARNING	swSignalfd_onSignal: signal[1] callback is null.
+[2018-09-07 04:53:37 $2521.0]	WARNING	swSignal_callback: signal[1] callback is null.
+[2018-09-07 04:53:37 $2521.0]	WARNING	swManager_check_exit_status: worker#16 abnormal exit, status=0, signal=1
+[2018-09-07 04:53:37 $2521.0]	WARNING	swManager_check_exit_status: worker#17 abnormal exit, status=0, signal=1
+[2018-09-07 04:53:37 #2520.1]	WARNING	swSignalfd_onSignal: signal[1] callback is null.
+[2018-09-07 10:09:33 *1887.7]	WARNING	swSignalfd_onSignal: signal[1] callback is null.
+[2018-09-07 10:09:33 *1886.6]	WARNING	swSignalfd_onSignal: signal[1] callback is null.
+[2018-09-07 10:09:33 *1885.5]	WARNING	swSignalfd_onSignal: signal[1] callback is null.
+[2018-09-07 10:09:33 *1884.4]	WARNING	swSignalfd_onSignal: signal[1] callback is null.
+[2018-09-07 10:09:33 *1883.3]	WARNING	swSignalfd_onSignal: signal[1] callback is null.
+[2018-09-07 10:09:33 *1882.2]	WARNING	swSignalfd_onSignal: signal[1] callback is null.
+[2018-09-07 10:09:33 *1881.1]	WARNING	swSignalfd_onSignal: signal[1] callback is null.
+[2018-09-07 10:09:33 *1880.0]	WARNING	swSignalfd_onSignal: signal[1] callback is null.
+[2018-09-07 10:09:33 $1870.0]	WARNING	swSignal_callback: signal[1] callback is null.
+[2018-09-07 10:09:33 $1870.0]	WARNING	swManager_check_exit_status: worker#16 abnormal exit, status=0, signal=1
+[2018-09-07 10:09:33 $1870.0]	WARNING	swManager_check_exit_status: worker#17 abnormal exit, status=0, signal=1

@@ -23,9 +23,18 @@
 
 
 #### 使用说明
+1. 新建数据库 && 导入数据库文件
+2. cd /path/to/api_server
+3. composer update 
+4. php easyswoole start
+
+#### 配置说明
 
 1. cd /path/to/api_server
-2. php easyswoole start
+2. cd App/Util/Config.php 修改为正确的七牛云配置
+3. cd Conf && 编辑 database.php
+
+
 
 #### 项目功能
 1. 行程记录(路径记录)
